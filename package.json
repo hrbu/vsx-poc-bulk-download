@@ -1,0 +1,19 @@
+{
+  "name": "poc-bulk-download",
+  "version": "1.0.0",
+  "description": "poc for file bulk download",
+  "scripts": {
+    "start": "node lib/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "boehlau@getrequest.de",
+  "license": "ISC",
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "archiver": "^5.3.1",
+    "async": "^3.2.4",
+    "base64-stream": "^1.0.0",
+    "byte-size": "^8.1.0",
+    "express": "^4.18.2"
+  }
+}

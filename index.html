@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- used an external library FileSaver to help use save file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js" integrity="sha512-UNbeFrHORGTzMn3HTt00fvdojBYHLPxJbLChmtoyDwB6P9hX5mah3kMKm0HHNx/EvSPJt14b+SlD8xhuZ4w9Lg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Download ZIP File</title>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <button id='download'>Download ZIP</button>
+    <script>
+        const url = 'http://localhost:8888/download'
+
+	// This function is used to convert Base64 to Blob
+        const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+            const byteCharacters = atob(b64Data);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            const blob = new Blob(byteArrays, {type: contentType});
+            return blob;
+        }
+
+        const handleDownload = () => {
+            fetch(url)
+                .then(response => {
+                    return response.text()
+                })
+                .then((base64Data) => {
+                    const blob = b64toBlob(base64Data, 'application/zip')
+		    // Used the FileSaver the save the file
+                    saveAs(blob, 'example.zip')
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+
+        const button = document.querySelector('#download')
+        button.addEventListener('click', handleDownload)
+    </script>
+</body>
+</html>
